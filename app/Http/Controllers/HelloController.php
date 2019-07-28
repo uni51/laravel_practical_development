@@ -8,19 +8,19 @@ use Illuminate\Http\Request;
 
 class HelloController extends Controller
 {
-//    public function index(Request $request)
-//    {
-//        $data = [
-//            'msg' => $request->hello,
-//        ];
-//
-//        return view('hello.index', $data);
-//    }
-
-    public function index($person)
+    function __construct()
     {
+        config([ 'sample.message' => '新しいメッセージ！']);
+    }
+
+    public function index()
+    {
+        $sample_msg = env('SAMPLE_MESSAGE');
+        $sample_data = env('SAMPLE_DATA');
+
         $data = [
-            'msg' => $person,
+            'msg'  => $sample_msg,
+            'data' => explode(',', $sample_data)
         ];
 
         return view('hello.index', $data);
@@ -28,10 +28,6 @@ class HelloController extends Controller
 
     public function other(Request $request)
     {
-        $data = [
-            'msg' => $request->bye,
-        ];
-
-        return view('hello.index', $data);
+        return redirect()->route('sample');
     }
 }
