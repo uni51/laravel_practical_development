@@ -3,6 +3,10 @@
 <head>
     <title>Index</title>
 </head>
+<style>
+    th { background-color:red; padding:10px; }
+    td { background-color:#eee; padding:10px; }
+</style>
 
 <body>
 
