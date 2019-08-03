@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Facades\MyService;
 
 class HelloController extends Controller
 {
@@ -10,12 +9,13 @@ class HelloController extends Controller
     {
     }
 
-    public function index(Request $request)
+    public function index(int $id = -1)
     {
+        MyService::setId($id);
 
         $data = [
-            'msg'=> $request->hello,
-            'data'=> $request->alldata,
+            'msg'=> MyService::say(),
+            'data'=> MyService::alldata()
         ];
 
         return view('hello.index', $data);
