@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Person;
-use App\Jobs\MyJob;
+//use App\Jobs\MyJob;
+use Illuminate\Support\Facades\Storage;
 
 class HelloController extends Controller
 {
@@ -12,18 +13,11 @@ class HelloController extends Controller
     {
     }
 
-    public function index(Person $person=null)
+    public function index()
     {
-        if($person != null)
-        {
-            $qname = $person->id % 2 == 0 ? 'even' : 'odd';
-//            MyJob::dispatch($person)->delay(now()->addSeconds(10));
-            MyJob::dispatch($person)->onQueue($qname);
-        }
+        $msg = 'show people record.';
 
-        $msg = 'index action : show people record aaaa.';
-
-        $result = Person::orderBy('id','asc')->get();
+        $result = Person::get();
 
         $data = [
             'input' => '',
@@ -34,20 +28,17 @@ class HelloController extends Controller
         return view('hello.index', $data);
     }
 
-
-    public function send(int $id)
+    public function send(Request $request)
     {
+        $id = $request->input('id');
 
-        $msg = 'send action : show people record.';
+        $person = Person::find($id);
 
-        $result = Person::find($id);
+        dispatch(function() use ($person)
+        {
+            Storage::append('person_access_log.txt', $person->all_data);
+        });
 
-        $data = [
-            'input' => $id,
-            'msg' => $msg,
-            'data' => $result,
-        ];
-
-        return view('hello.index', $data);
+        return redirect()->route('hello');
     }
 }

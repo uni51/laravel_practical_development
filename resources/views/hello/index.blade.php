@@ -11,9 +11,10 @@
 <div>
     <form action="/hello" method="post">
         @csrf
-        <input type="text" id="find" name="find" value="{{$input}}">
+        ID: <input type="text" id="id" name="id">
         <input type="submit">
     </form>
+
 </div>
 <hr>
 <table border="1">
