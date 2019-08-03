@@ -11,18 +11,12 @@
 
 <p>{{$msg}}</p>
 
-<table border="1">
+<ol>
     @foreach($data as $item)
-        <tr>
-            <th>{{$item->id}}</th>
-            <td>{{$item->name}}</td>
-            <td>{{$item->mail}}</td>
-            <td>{{$item->age}}</td>
-        </tr>
+        <li>{{$item->name}}[{{$item->mail}},{{$item->age}}]</li>
     @endforeach
-</table>
-
-<hr>
+</ol>
+{!! $paginator->link() !!}
 
 </body>
 </html>
