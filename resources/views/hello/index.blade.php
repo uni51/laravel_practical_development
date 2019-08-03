@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
     <title>Index</title>
+    <link href="/css/app.css" rel="stylesheet">
 </head>
 
 <body>
@@ -15,6 +16,7 @@
         <li>{{$item->name}}[{{$item->mail}},{{$item->age}}]</li>
     @endforeach
 </ol>
+{!! $paginator->link() !!}
 
 </body>
 </html>
