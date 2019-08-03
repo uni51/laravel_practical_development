@@ -22,5 +22,6 @@
 //Route::get('/hello/json/{id}', 'HelloController@json');
 
 
-Route::get('/hello', 'HelloController@index');
-Route::post('/hello', 'HelloController@send');
+//Route::get('/hello', 'HelloController@index');
+Route::get('/hello/{person?}', 'HelloController@index');
+Route::post('/hello/{id}', 'HelloController@send');

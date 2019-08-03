@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Person;
+use App\Jobs\MyJob;
 
 class HelloController extends Controller
 {
@@ -11,14 +12,15 @@ class HelloController extends Controller
     {
     }
 
-    public function index()
+    public function index(Person $person=null)
     {
-        $msg = 'show people record.';
+        if($person != null) {
+            MyJob::dispatch($person);
+        }
 
-        // インデックスの更新を行う
-//        Person::get(['*'])->searchable();
+        $msg = 'index action : show people record aaaa.';
 
-        $result = Person::get();
+        $result = Person::orderBy('id','asc')->get();
 
         $data = [
             'input' => '',
@@ -30,17 +32,15 @@ class HelloController extends Controller
     }
 
 
-    public function send(Request $request)
+    public function send(int $id)
     {
-        $input = $request->input('find');
 
-        $msg = 'search: ' . $input;
+        $msg = 'send action : show people record.';
 
-        $result = Person::search($input)->get();
-
+        $result = Person::find($id);
 
         $data = [
-            'input' => $input,
+            'input' => $id,
             'msg' => $msg,
             'data' => $result,
         ];

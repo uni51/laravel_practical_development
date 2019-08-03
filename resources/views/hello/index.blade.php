@@ -20,7 +20,7 @@
     @foreach($data as $item)
         <tr>
             <th>{{$item->id}}</th>
-            <td>{{$item->name}}</td>
+            <td>{{$item->all_data}}</td>
         </tr>
     @endforeach
 </table>
