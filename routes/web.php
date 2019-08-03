@@ -15,9 +15,12 @@
 
 //Route::get('/hello/{id}/{name}', 'HelloController@save');
 
-Route::get('/hello', 'HelloController@index')->name('hello');
+//Route::get('/hello', 'HelloController@index')->name('hello');
 //Route::get('/hello/other', 'HelloController@other');
 
-Route::get('/hello/json', 'HelloController@json');
-Route::get('/hello/json/{id}', 'HelloController@json');
+//Route::get('/hello/json', 'HelloController@json');
+//Route::get('/hello/json/{id}', 'HelloController@json');
 
+
+Route::get('/hello', 'HelloController@index');
+Route::post('/hello', 'HelloController@send');

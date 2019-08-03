@@ -11,65 +11,40 @@ class HelloController extends Controller
     {
     }
 
-    /**
-     * カスタムコレクションの利用
-     *
-     */
-    public function index(Request $request)
+    public function index()
     {
         $msg = 'show people record.';
 
-        $records = Person::get();
+        // インデックスの更新を行う
+//        Person::get(['*'])->searchable();
 
-        $fields = Person::get()->fields();
+        $result = Person::get();
 
         $data = [
-            'msg' => implode(', ', $fields),
-            'data' => $records,
+            'input' => '',
+            'msg' => $msg,
+            'data' => $result,
         ];
 
         return view('hello.index', $data);
     }
 
 
-    public function save($id, $name)
+    public function send(Request $request)
     {
-        $record = Person::find($id);
+        $input = $request->input('find');
 
-        // ミューテータによって、名前が大文字に変換される
-        $record->name = $name;
+        $msg = 'search: ' . $input;
 
-        $record->save();
-
-        return redirect()->route('hello');
-    }
+        $result = Person::search($input)->get();
 
 
-    public function other()
-    {
-        $person = new Person();
+        $data = [
+            'input' => $input,
+            'msg' => $msg,
+            'data' => $result,
+        ];
 
-        $person->all_data = ['aaa','bbb@ccc', 34]; // ダミーデータ
-
-        $person->save();
-
-        return redirect()->route('hello');
-    }
-
-
-    /**
-     * JSON形式でのレコード取得（toJson）
-     *
-     */
-    public function json($id = -1)
-    {
-        if ($id == -1)
-        {
-            return Person::get()->toJson();
-        }
-        else
-        {
-            return Person::find($id)->toJson();
-        }
+        return view('hello.index', $data);
     }
 }
