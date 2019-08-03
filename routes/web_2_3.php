@@ -11,5 +11,13 @@
 |
 */
 
-Route::get('/hello/{id?}', 'HelloController@index');
+//Route::get('/hello', 'HelloController@index')
+//    ->middleware(App\Http\Middleware\MyMiddleware::class);
+//
+//
+//Route::get('/hello/{id}', 'HelloController@index')
+//    ->middleware(App\Http\Middleware\MyMiddleware::class);
+
+Route::get('/hello', 'HelloController@index')
+    ->middleware('MyMW');
 
