@@ -14,8 +14,11 @@ class HelloController extends Controller
 
     public function index(Person $person=null)
     {
-        if($person != null) {
-            MyJob::dispatch($person);
+        if($person != null)
+        {
+            $qname = $person->id % 2 == 0 ? 'even' : 'odd';
+//            MyJob::dispatch($person)->delay(now()->addSeconds(10));
+            MyJob::dispatch($person)->onQueue($qname);
         }
 
         $msg = 'index action : show people record aaaa.';
