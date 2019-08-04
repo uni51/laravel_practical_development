@@ -2,11 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Person;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExampleTest extends TestCase
 {
+
+    use RefreshDatabase;
+
     /**
      * A basic test example.
      *
@@ -14,44 +18,54 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-//        $response = $this->get('/');
-//        $response->assertStatus(200);
+//      /* peopleテーブルを利用する */
+//        $data = [
+//            'id' => 1,
+//            'name' => 'YAMADA-TARO',
+//            'mail' => 'taro@yamada',
+//            'age' => '34'
+//        ];
 
-        // ステータスのチェック
-        $this->get('/')->assertStatus(200);
+//        $this->assertDatabaseHas('people', $data);
 
-        // ステータスOKのチェック
-        $this->get('/hello')->assertOk();
+//        $data['id'] =2;
+//        $this->assertDatabaseMissing('people', $data);
 
-        // POSTのチェック
-//        $this->post('/hello')->assertOk();
 
-        // パラメータを指定する
-        $this->get('/hello/1')->assertOk();
+//      /* モデルを利用する */
+//        $data = [
+//            'id' => 1,
+//            'name' => 'DUMMY',
+//            'mail' => 'dummy@mail',
+//            'age' => 0,
+//        ];
+//        $person = new Person();
+//        $person->fill($data)->save();
+//        $this->assertDatabaseHas('people',$data);
+//
+//
+//        $person->name = 'NOT-DUMMY';
+//        $person->save();
+//        $this->assertDatabaseMissing('people',$data);
+//
+//        $data['name'] = 'NOT-DUMMY';
+//        $this->assertDatabaseHas('people',$data);
+//
+//
+//        $person->delete();
+//        $this->assertDatabaseMissing('people',$data);
 
-        // 存在しないページのチェック
-        $this->get('/hoge')->assertStatus(404);
 
-        // コンテンツに含まれるテキスト
-        $this->get('/hello')->assertSeeText('Index');
 
-        // レスポンスに含まれるテキスト
-        $this->get('/hello')->assertSee('<h1>');
+//      /* シードを利用する */
+        $this->seed(\DatabaseSeeder::class);
+        $person = Person::find(1);
+        $data = $person->toArray();
 
-        // 用意したテキストが順に登場する
-        $this->get('/hello')->assertSeeInOrder(['<html','<head','<body','<h1>']);
+        $this->assertDatabaseHas('people', $data);
 
-        $seeText1 = '杉山 七夏_MYJOB_';
-        $seeJsEnText1 = json_encode($seeText1);
-        // Ajaxへのアクセス（コンテンツに含まれるテキスト）
-        $this->get('/hello/json/1')->assertSeeText($seeJsEnText1);
+        $person->delete();
+        $this->assertDatabaseMissing('people', $data);
 
-        // Ajaxの内容チェック
-        $seeText2 = '原田 康弘_MYJOB_';
-        $this->get('/hello/json/2')->assertExactJson(
-            ['id'=>2, 'name'=> $seeText2,
-                'mail'=>'watanabe.mitsuru@sasada.com','age'=> 8,
-                'created_at'=>'2019-08-03 00:00:00',
-                'updated_at'=>'2019-08-04 01:40:27']);
     }
 }
