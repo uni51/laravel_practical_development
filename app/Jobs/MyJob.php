@@ -2,12 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Person;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Person;
+use Illuminate\Support\Facades\Storage;
 
 class MyJob implements ShouldQueue
 {
@@ -15,24 +17,29 @@ class MyJob implements ShouldQueue
 
     protected $person;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct(Person $person)
+    public function getPersonId()
     {
-        $this->person = $person;
+        return $this->person->id;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
+    public function __construct($id)
+    {
+        $this->person = Person::find($id)->first();
+    }
+
+    public function __invoke()
+    {
+        $this->handle();
+    }
+
     public function handle()
     {
-        $sufix = '_MYJOB_';
+        $this->doJob();
+    }
+
+    public function doJob()
+    {
+        $sufix = ' _MYJOB_';
 
         if (strpos($this->person->name, $sufix))
         {
@@ -41,5 +48,7 @@ class MyJob implements ShouldQueue
             $this->person->name .= $sufix;
         }
         $this->person->save();
+
+        Storage::append('person_access_log.txt', $this->person->all_data);
     }
 }
