@@ -16,34 +16,22 @@ class HelloController extends Controller
 
     public function index()
     {
-        $msg = 'show people record.';
-
-        $result = Person::get();
-
         $data = [
-            'input' => '',
-            'msg' => $msg,
-            'data' => $result,
+            'msg' => 'This is React application.',
         ];
 
         return view('hello.index', $data);
     }
 
-    public function send(Request $request)
+    public function json($id = -1)
     {
-        $id = $request->input('id');
-
-        $person = Person::find($id);
-
-        // イベントの発行を行なっている
-        event(new PersonEvent($person));
-
-        $data = [
-            'input' => '',
-            'msg' => 'id='. $id,
-            'data' => [$person],
-        ];
-
-        return view('hello.index', $data);
+        if ($id == -1)
+        {
+            return Person::get()->toJson();
+        }
+        else
+        {
+            return Person::find($id)->toJson();
+        }
     }
 }
