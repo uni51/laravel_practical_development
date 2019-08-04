@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Person;
-//use App\Jobs\MyJob;
-use Illuminate\Support\Facades\Storage;
+use App\Events\PersonEvent;
+
+use Illuminate\Http\Request;
+
 
 class HelloController extends Controller
 {
@@ -34,11 +35,15 @@ class HelloController extends Controller
 
         $person = Person::find($id);
 
-        dispatch(function() use ($person)
-        {
-            Storage::append('person_access_log.txt', $person->all_data);
-        });
+        // イベントの発行を行なっている
+        event(new PersonEvent($person));
 
-        return redirect()->route('hello');
+        $data = [
+            'input' => '',
+            'msg' => 'id='. $id,
+            'data' => [$person],
+        ];
+
+        return view('hello.index', $data);
     }
 }
