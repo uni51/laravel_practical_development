@@ -23,6 +23,21 @@ class HelloController extends Controller
         return view('hello.index', $data);
     }
 
+    public function send(Request $request)
+    {
+        $id = $request->input('id');
+        $person = Person::find($id);
+
+        event(new PersonEvent($person));
+
+        $data = [
+            'input' => '',
+            'msg' => 'id='. $id,
+            'data' => [$person],
+        ];
+        return view('hello.index', $data);
+    }
+
     public function json($id = -1)
     {
         if ($id == -1)
